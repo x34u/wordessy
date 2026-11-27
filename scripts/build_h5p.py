@@ -695,7 +695,10 @@ def make_memorygame(words: list[str], image_dims: dict, title: str) -> dict:
 
 def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]]) -> dict:
     hw, hh = image_dims["wordi-hero.png"]
-    mw, mh = image_dims["world-map.png"]
+    mw, mh = image_dims.get("gamemap-bg.png", image_dims["world-map.png"])
+    map_rel_path = "images/gamemap-bg.png" if "gamemap-bg.png" in image_dims else "images/world-map.png"
+    tw, th = image_dims.get("gamemap-title.png", image_dims["wordi-hero.png"])
+    title_rel_path = "images/gamemap-title.png" if "gamemap-title.png" in image_dims else "images/wordi-hero.png"
     ew, eh = image_dims["wordi-expressions.png"]
     aw, ah = image_dims["clue-apple.png"]
 
@@ -708,15 +711,16 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
                 make_shape(3, 5, 94, 90, fill="#17161d", border="#f4efe6", bw="2", radius="4"),
                 make_image(6, 13, 27, 48, "images/wordi-hero.png", hw, hh, "Wordi the Inu mascot", "Wordi the Inu"),
                 make_text(
-                    36, 8, 58, 35,
+                    36, 8, 58, 34,
                     '<h3><span style="color:#c6ff3d;">WORDYSSEY: ENGLISH ODYSSEY</span></h3>'
                     '<p><span style="color:#f4efe6;">Explore <strong>5 floating islands</strong>, complete English vocabulary activities, and launch the full HTML5 platformer!</span></p>'
                     '<p><span style="color:#ffd43b;"><em>"One word at a time, you can go a long way!"</em></span></p>',
                 ),
-                make_shape(36, 45, 58, 22, fill="#211f29", border="#c6ff3d", bw="2", radius="3"),
-                make_text(38, 46.5, 54, 8, '<p><span style="color:#c6ff3d;"><strong>CONNECT &amp; PLAY HTML5 GAME (GITHUB PAGES)</strong></span></p>'),
-                make_link(38, 55, 54, 9, "Open Playable Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=100),
-                make_shape(36, 71, 58, 18, fill="#211f29", border="#ff7a1a", bw="2", radius="3"),
+                make_shape(36, 44, 58, 23, fill="#211f29", border="#c6ff3d", bw="2", radius="4"),
+                make_text(38, 45.5, 54, 7.5, '<p><span style="color:#c6ff3d;"><strong>PLAY FULL HTML5 GAME (GITHUB PAGES)</strong></span></p>'),
+                make_shape(38, 54, 54, 10, fill="#fff9ee", border="#c6ff3d", bw="2", radius="4"),
+                make_link(39.5, 55.2, 51, 7.6, "Open Playable Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=0),
+                make_shape(36, 71, 58, 18, fill="#211f29", border="#ff7a1a", bw="2", radius="4"),
                 make_text(38, 72.5, 54, 15, '<p><span style="color:#ff7a1a;"><strong>Next Slide →</strong></span> <span style="color:#f4efe6;">View controls, combat moves &amp; island mechanics, then close this window to unlock Island 1-3!</span></p>'),
             ],
         },
@@ -784,9 +788,10 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
                     '<li><span style="color:#ff7a1a;"><strong>Hero:</strong></span> <span style="color:#f4efe6;">2 Hearts · 1.0s Invulnerability · 1.35x Fast Enemies · 8s Quiz · 2.0x Score!</span></li>'
                     '</ul>',
                 ),
-                make_shape(4, 64, 92, 26, fill="#211f29", border="#c6ff3d", bw="2", radius="3"),
-                make_text(6, 67, 46, 18, '<p><span style="color:#f4efe6;">Ready to battle the <strong>Word Titan Boss</strong> in Stage 5? Launch the full game below:</span></p>'),
-                make_link(55, 70, 38, 12, "Launch Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=100),
+                make_shape(4, 64, 92, 26, fill="#211f29", border="#c6ff3d", bw="2", radius="4"),
+                make_text(6, 67, 46, 18, '<p><span style="color:#f4efe6;">Ready to battle the <strong>Word Titan Boss</strong> in Stage 5? Launch the full game:</span></p>'),
+                make_shape(54, 69, 39, 15, fill="#fff9ee", border="#c6ff3d", bw="2", radius="4"),
+                make_link(55.5, 71.5, 36, 10, "Launch Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=0),
             ],
         },
     ]
@@ -810,7 +815,7 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
         "disableImageZooming": False,
     }
 
-    def stage_node(label, x, y, neighbors, content_item, is_start=False):
+    def stage_node(label, cx, cy, neighbors, content_item, is_start=False):
         return {
             "id": new_id(),
             "type": "stage",
@@ -822,15 +827,15 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
             "specialStageExtraTime": 1,
             "neighbors": neighbors,
             "telemetry": {
-                "x": str(x),
-                "y": str(y),
+                "x": str(round(cx - 2.1875, 4)),
+                "y": str(round(cy - 3.888889, 4)),
                 "width": "4.375",
                 "height": "7.777777777777778",
             },
             "contentsList": [{"contentType": content_item}],
         }
 
-    def special_node(label, x, y, neighbors, special_type, link_url=None):
+    def special_node(label, cx, cy, neighbors, special_type, link_url=None):
         node = {
             "id": new_id(),
             "type": "special-stage",
@@ -843,8 +848,8 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
             "specialStageExtraTime": 1,
             "neighbors": neighbors,
             "telemetry": {
-                "x": str(x),
-                "y": str(y),
+                "x": str(round(cx - 2.1875, 4)),
+                "y": str(round(cy - 3.888889, 4)),
                 "width": "4.375",
                 "height": "7.777777777777778",
             },
@@ -857,18 +862,18 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
     elements = [
         stage_node(
             "1-1 Basic: Intro & HTML5 Game",
-            11.9, 73.9, ["1"],
+            14.5, 77.5, ["1"],
             build_course_presentation_shell(intro_slides, "1-1 Wordyssey Course Presentation"),
             is_start=True,
         ),
         stage_node(
             "1-3 Basic: Food & Fruits Quiz",
-            23.8, 66.8, ["0", "2"],
+            25.5, 71.5, ["0", "2"],
             mc_apple,
         ),
         stage_node(
             "2-1 Daily Life: Drag the Words",
-            24.9, 36.8, ["1", "3"],
+            28.5, 37.5, ["1", "3"],
             make_dragtext(
                 "Drag the English vocabulary words into the matching Wordyssey sentences.",
                 "Wordi loves eating a sweet red *apple* after exploring Basic Meadow, or sharing warm cheesy *pizza* in the village! "
@@ -878,7 +883,7 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
         ),
         stage_node(
             "2-3 Sunset Valley: True or False",
-            41.6, 31.3, ["2", "4"],
+            39.0, 35.5, ["2", "4"],
             make_truefalse(
                 "True or False: Wordi the Inu is a friendly puppy wearing a blue paw bandana.",
                 True, "clue-dog.png", "Wordi the friendly puppy", image_dims, "Wordi True/False Check",
@@ -886,33 +891,33 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
         ),
         stage_node(
             "3-1 Adventure: Wordi & Modes",
-            55.1, 36.8, ["3", "5"],
+            53.5, 36.5, ["3", "5"],
             build_course_presentation_shell(adventure_slides, "3-1 Wordi & Modes Course Presentation"),
         ),
         stage_node(
             "3-3 Citadel: Memory Game",
-            69.7, 36.8, ["4", "6"],
+            67.0, 36.5, ["4", "6"],
             make_memorygame(["apple", "star", "dog", "book", "castle", "pizza"], image_dims, "Wordyssey Clue Memory Game"),
         ),
         stage_node(
             "4-1 Future: 12 Word Flashcards",
-            80.1, 49.8, ["5", "7"],
+            78.0, 50.5, ["5", "7"],
             make_dialogcards(0, 0, 100, 100, image_dims)["action"],
         ),
         stage_node(
             "4-3 Quantum Spire: Speed Quiz",
-            91.5, 53.5, ["6", "8", "9"],
+            90.0, 51.5, ["6", "8", "9"],
             make_single_choice_set(0, 0, 100, 100, ["star", "pizza", "car", "tree", "sun", "wave"])["action"],
         ),
         special_node(
             "Play Live HTML5 Game",
-            73.5, 78.5, ["7", "9"],
+            78.0, 81.0, ["7", "9"],
             "link",
             link_url=game_url,
         ),
         special_node(
             "Final Stage: Star Palace Finish",
-            83.2, 77.6, ["7", "8"],
+            88.0, 81.0, ["7", "8"],
             "finish",
         ),
     ]
@@ -921,29 +926,28 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
         "showTitleScreen": True,
         "titleScreen": {
             "titleScreenIntroduction": (
-                '<h2 style="text-align:center;">Wordyssey: Wordi\'s English Odyssey</h2>'
-                '<p style="text-align:center;">Travel across the <strong>5 Floating Islands</strong>, complete each English activity, and click <strong>Play Live HTML5 Game</strong> or the Course Presentation links to play the full platformer!</p>'
+                '<p style="text-align:center;">Complete each floating island stage and click <strong>Play Live HTML5 Game</strong> or the Course Presentation buttons to launch Wordyssey!</p>'
             ),
             "titleScreenMedium": {
                 "library": "H5P.Image 1.1",
                 "params": {
-                    "file": {"path": "images/wordi-hero.png", "mime": "image/png", "copyright": {"license": "U"}, "width": hw, "height": hh},
+                    "file": {"path": title_rel_path, "mime": "image/png", "copyright": {"license": "U"}, "width": tw, "height": th},
                     "decorative": False,
-                    "alt": "Wordi the Inu mascot",
-                    "title": "Wordi the Inu",
+                    "alt": "Wordyssey 5-Island Adventure Banner with Wordi",
+                    "title": "Wordyssey Banner",
                     "contentName": "Image",
                     "expandImage": "Expand Image",
                     "minimizeImage": "Minimize Image",
                 },
                 "subContentId": new_id(),
-                "metadata": {"contentType": "Image", "license": "U", "title": "Wordi the Inu"},
+                "metadata": {"contentType": "Image", "license": "U", "title": "Wordyssey Banner"},
             },
         },
         "headline": "Wordyssey: 5-Island Adventure Map",
         "gamemapSteps": {
             "backgroundImageSettings": {
                 "backgroundImage": {
-                    "path": "images/world-map.png",
+                    "path": map_rel_path,
                     "mime": "image/png",
                     "copyright": {"license": "U"},
                     "width": mw,
@@ -966,16 +970,16 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
         },
         "visual": {
             "stages": {
-                "colorStage": "rgba(255, 122, 26, 0.88)",
-                "colorStageLocked": "rgba(33, 31, 41, 0.85)",
-                "colorStageCleared": "rgba(198, 255, 61, 0.9)",
+                "colorStage": "rgba(255, 122, 26, 0.96)",
+                "colorStageLocked": "rgba(15, 23, 42, 0.88)",
+                "colorStageCleared": "rgba(132, 204, 22, 0.96)",
                 "showScoreStars": "always",
             },
             "paths": {
                 "displayPaths": True,
                 "style": {
-                    "colorPath": "rgba(244, 239, 230, 0.85)",
-                    "colorPathCleared": "rgba(198, 255, 61, 0.95)",
+                    "colorPath": "rgba(255, 255, 255, 0.92)",
+                    "colorPathCleared": "rgba(198, 255, 61, 0.96)",
                     "pathWidth": "0.2",
                     "pathStyle": "dotted",
                 },
@@ -1067,17 +1071,18 @@ def build_course_presentation_content(game_url: str, image_dims: dict[str, tuple
             make_shape(3, 5, 94, 90, fill="#17161d", border="#f4efe6", bw="2", radius="4"),
             make_image(6, 13, 27, 48, "images/wordi-hero.png", hw, hh, "Wordi the Inu mascot", "Wordi the Inu"),
             make_text(
-                36, 10, 58, 30,
-                '<h2><span style="color:#c6ff3d;">WORDYSSEY: WORDI\'S ENGLISH ODYSSEY</span></h2>'
+                36, 8, 58, 33,
+                '<h3><span style="color:#c6ff3d;">WORDYSSEY: ENGLISH ODYSSEY</span></h3>'
                 '<p><span style="color:#f4efe6;">An interactive English vocabulary adventure across <strong>5 floating islands</strong> and <strong>13 action stages</strong> starring Wordi the Inu.</span></p>'
                 '<p><span style="color:#ffd43b;"><em>"One word at a time, you can go a long way!"</em></span></p>',
             ),
-            make_shape(36, 43, 58, 22, fill="#211f29", border="#c6ff3d", bw="2", radius="3"),
+            make_shape(36, 43, 58, 22, fill="#211f29", border="#c6ff3d", bw="2", radius="4"),
             make_text(
-                38, 45, 54, 8,
+                38, 44.5, 54, 7.5,
                 '<p><span style="color:#c6ff3d;"><strong>LAUNCH HTML5 GAME (GITHUB PAGES)</strong></span></p>',
             ),
-            make_link(38, 53, 54, 9, "Open Playable Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=100),
+            make_shape(38, 53, 54, 9.5, fill="#fff9ee", border="#c6ff3d", bw="2", radius="4"),
+            make_link(39.5, 54, 51, 7.5, "Open Playable Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=0),
             # Slide quick-jump buttons
             make_shape(6, 70, 28, 18, fill="#211f29", border="#ff7a1a", bw="2", radius="3"),
             make_text(7.5, 72, 25, 14, '<p><span style="color:#ff7a1a;"><strong>5 Floating Worlds</strong></span><br><span style="color:#f4efe6;">Explore Map &amp; Stages</span></p>'),
@@ -1108,9 +1113,10 @@ def build_course_presentation_content(game_url: str, image_dims: dict[str, tuple
                 '<p><span style="font-size:0.875em;color:#5ce1e6;"><strong>4. Future (4-1–4-3):</strong></span> <span style="font-size:0.875em;color:#f4efe6;">Monorails &amp; quantum blocks.</span></p>'
                 '<p><span style="font-size:0.875em;color:#ffd43b;"><strong>5. Star Palace:</strong></span> <span style="font-size:0.875em;color:#f4efe6;">Word Titan Final Boss!</span></p>',
             ),
-            make_shape(4, 79, 92, 15, fill="#211f29", border="#c6ff3d", bw="2", radius="3"),
+            make_shape(4, 79, 92, 15, fill="#211f29", border="#c6ff3d", bw="2", radius="4"),
             make_text(6, 82, 52, 9, '<p><span style="color:#f4efe6;"><strong>Modes:</strong> Casual (4 HP) · Normal (3 HP) · Hero (2 HP, 2x Score)</span></p>'),
-            make_link(60, 82, 34, 9, "Launch Wordyssey Game", game_url, display_as_button=False, opacity=100),
+            make_shape(59, 81.2, 35, 10.6, fill="#fff9ee", border="#c6ff3d", bw="2", radius="4"),
+            make_link(60.5, 82.4, 32, 8.2, "Launch Wordyssey Game", game_url, display_as_button=False, opacity=0),
         ],
     }
 
@@ -1209,8 +1215,9 @@ def build_course_presentation_content(game_url: str, image_dims: dict[str, tuple
                 '<p><span style="color:#f4efe6;"><strong>Palette:</strong> Orange <code>#ff9533</code> · Cream <code>#fff4e0</code> · Blue <code>#0a84ff</code> · Pink <code>#ff9eaa</code></span></p>'
                 '<p><span style="color:#ffd43b;">Next slide shows your H5P Quiz Summary score — or jump straight into the 13-stage HTML5 game!</span></p>',
             ),
-            make_shape(60, 66, 36, 26, fill="#211f29", border="#c6ff3d", bw="2", radius="3"),
-            make_link(62, 74, 32, 10, "Play Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=100),
+            make_shape(60, 66, 36, 26, fill="#211f29", border="#c6ff3d", bw="2", radius="4"),
+            make_shape(61.5, 72.5, 33, 13, fill="#fff9ee", border="#c6ff3d", bw="2", radius="4"),
+            make_link(63, 74.5, 30, 9, "Play Wordyssey HTML5 Game", game_url, display_as_button=False, opacity=0),
         ],
     }
 
