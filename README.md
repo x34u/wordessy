@@ -106,17 +106,20 @@ python -m http.server 8000
 Then visit `http://localhost:8000`.
 
 ### Deploy to GitHub Pages (3 Clicks)
+- **Live Demo:** https://x34u.github.io/wordessy/
+- **H5P / Lumi Connector:** https://x34u.github.io/wordessy/h5p-connect.html
+
 1. Push the contents of this folder (`index.html`, `h5p/`, `h5p-connect.html`, `scripts/`, `.js`, `.css`) to your GitHub repository root:
    ```bash
    git add .
-   git commit -m "feat: Wordyssey game with H5P Course Presentation for Lumi"
+   git commit -m "feat: Wordyssey game with H5P Game Map for Lumi"
    git branch -M main
-   git remote add origin https://github.com/your-username/wordyssey.git
+   git remote add origin https://github.com/x34u/wordessy.git
    git push -u origin main
    ```
 2. In GitHub, go to **Settings** > **Pages**.
 3. Under **Branch**, select `main` and `/ (root)`, then click **Save**.
-4. Live immediately at `https://your-username.github.io/wordyssey/` with zero asset or audio 404 errors!
+4. Live at `https://x34u.github.io/wordessy/` with zero asset or audio 404 errors!
 
 ---
 
@@ -129,16 +132,16 @@ This project includes ready-to-use `.h5p` packages under `h5p/` built with offic
 | `h5p/wordyssey-game-map.h5p` | **Primary deliverable:** Interactive 10-stage **`H5P.GameMap`** over Wordyssey's 5-island map (`world-map.png`) with **Course Presentation** stages (`H5P.CoursePresentation`, not Tabs), MultiChoice, Drag the Words, True/False, Memory Game, Dialog Cards, Single Choice Set, and direct HTML5 game launch links. | **Lumi Cloud + Lumi Desktop** |
 | `h5p/wordyssey-course-presentation.h5p` | **Standalone Course Presentation:** 10-slide **`H5P.CoursePresentation`** with Wordi artwork, flashcards, quizzes, Summary score slide, and HTML5 game launch links. | **Lumi Cloud + Lumi Desktop** |
 | `h5p/wordyssey-iframe-embed.h5p` | **Bonus IFrame Embed:** Wraps your live GitHub Pages game URL using official `H5P.IFrameEmbed` (`1.0.29`). | **Lumi Desktop / LMS** *(Note: use `--offline-html` in `build_h5p.py` only for servers allowing `.html` inside `content/`)* |
-| `h5p-connect.html` | **1-Click GitHub → Lumi Connector:** Open on your live GitHub Pages site (`https://your-username.github.io/wordyssey/h5p-connect.html`) to automatically stamp your live game URL into `wordyssey-game-map.h5p` (or `wordyssey-course-presentation.h5p`) and download it. | Browser (no install needed) |
+| `h5p-connect.html` | **1-Click GitHub → Lumi Connector:** Open on your live GitHub Pages site (`https://x34u.github.io/wordessy/h5p-connect.html`) to automatically stamp your live game URL into `wordyssey-game-map.h5p` (or `wordyssey-course-presentation.h5p`) and download it. | Browser (no install needed) |
 | `scripts/build_h5p.py` | CLI builder to regenerate all `.h5p` files with any custom `--url`. | Python 3 |
 
 ### Step-by-Step: Connect GitHub HTML5 Game into Lumi (Game Map + Course Presentation)
-1. **Deploy to GitHub Pages** using the steps above so your game is live at `https://YOUR-USERNAME.github.io/YOUR-REPO/`.
+1. **Deploy to GitHub Pages** using the steps above so your game is live at `https://x34u.github.io/wordessy/`.
 2. **Generate your linked `.h5p`:**
-   - **Option A (Easiest — in browser):** Visit `https://YOUR-USERNAME.github.io/YOUR-REPO/h5p-connect.html`. It auto-detects your live GitHub Pages URL — click **Download Game Map .h5p**.
+   - **Option A (Easiest — in browser):** Visit `https://x34u.github.io/wordessy/h5p-connect.html`. It auto-detects your live GitHub Pages URL — click **Download Game Map .h5p**.
    - **Option B (CLI):** Run:
      ```bash
-     python scripts/build_h5p.py --url https://YOUR-USERNAME.github.io/YOUR-REPO/
+     python scripts/build_h5p.py --url https://x34u.github.io/wordessy/
      ```
    - **Option C (Inside Lumi):** Upload `h5p/wordyssey-game-map.h5p` directly into Lumi, click **Edit**, and update the Course Presentation Link elements / Final Stage external link to your GitHub Pages URL.
 3. **Open / Upload in Lumi:**
