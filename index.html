@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Wordyssey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+  <meta name="theme-color" content="#0f0e13">
+</head>
+<body>
+  <div id="appleToast" class="toast" aria-live="polite"></div>
+
+  <!-- Translucent Apple Navigation Bar -->
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand" id="brandHomeBtn">
+        <svg viewBox="0 0 24 24" width="18" height="18">
+          <ellipse cx="12" cy="14" rx="4.5" ry="3.5" fill="#ff9f0a"/>
+          <circle cx="6.5" cy="8.5" r="2.2" fill="#ff9f0a"/>
+          <circle cx="10" cy="5.5" r="2.2" fill="#ff9f0a"/>
+          <circle cx="14" cy="5.5" r="2.2" fill="#ff9f0a"/>
+          <circle cx="17.5" cy="8.5" r="2.2" fill="#ff9f0a"/>
+        </svg>
+        <span class="brand-name">Wordyssey</span>
+        <span class="brand-sep"></span>
+        <span class="brand-sub">Wordi's Odyssey</span>
+      </div>
+
+      <div class="nav-group">
+        <div class="seg" id="headerDifficultyPicker" aria-label="Difficulty Mode">
+          <button class="seg-btn" data-diff="casual" type="button"><span class="seg-dot"></span><span>Casual</span></button>
+          <button class="seg-btn on" data-diff="normal" type="button"><span class="seg-dot"></span><span>Normal</span></button>
+          <button class="seg-btn" data-diff="hero" type="button"><span class="seg-dot"></span><span>Hero</span></button>
+        </div>
+
+        <div class="pill pill-star" title="Stars">
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span id="navTotalStars">0</span>
+        </div>
+        <div class="pill pill-coin" title="Coins">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v10M9 9h6M9 15h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span id="navTotalCoins">0</span>
+        </div>
+
+        <button id="btnMusic" class="pill on" title="Toggle Music" type="button">
+          <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </button>
+        <button id="btnSound" class="pill on" title="Toggle Sound" type="button">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- VIEW 1: Overworld Map -->
+    <section id="viewWorldMap" class="view on">
+      <div class="map-wrap">
+        <canvas id="worldMapCanvas" width="960" height="540"></canvas>
+
+        <div class="map-diff" id="mapFloatingDiff">
+          <span class="map-diff-label">Mode</span>
+          <div class="seg" id="mapDifficultyPicker">
+            <button class="seg-btn" data-diff="casual" type="button"><span class="seg-dot"></span><span>Casual</span></button>
+            <button class="seg-btn on" data-diff="normal" type="button"><span class="seg-dot"></span><span>Normal</span></button>
+            <button class="seg-btn" data-diff="hero" type="button"><span class="seg-dot"></span><span>Hero</span></button>
+          </div>
+        </div>
+
+        <div id="mapNodeCard" class="node-card hidden">
+          <div>
+            <div id="mapNodeTitle" class="node-title">1-1 Basic Meadow</div>
+            <div id="mapNodeDesc" class="node-desc">Collect 10 stars</div>
+            <div style="margin-top: 6px;">
+              <button id="mapNodeDifficultyBtn" class="chip" title="Cycle difficulty" type="button">
+                <span class="chip-dot"></span>
+                <span id="mapNodeDifficultyPill">Normal · 1.25x</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              </button>
+            </div>
+          </div>
+          <button id="btnLaunchMapLevel" class="btn-primary" style="height: 34px; padding: 0 16px; font-size: 13px;" type="button">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <span>Play</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="map-bar">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--orange)"><path d="M12 2L9 9l-7 3 7 3 3 7 3-7 7-3-7-3z"/></svg>
+          <span>Select any island stage node to begin your adventure.</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <a id="btnH5PConnect" href="h5p-connect.html" class="chip" style="color:var(--lime);text-decoration:none;">H5P / Lumi</a>
+          <button id="btnUnlockAllStages" class="chip" style="color:var(--yellow);" type="button">All 13 Stages Unlocked</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: Action Game -->
+    <section id="viewActionGame" class="view">
+      <div class="game-wrap" id="gameViewport">
+        <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+        <div class="hud" id="hudOverlay">
+          <div class="hud-row">
+            <button id="btnReturnToMapFromHud" class="glass hud-btn" title="Return to Map" type="button">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+              <span>Map</span>
+            </button>
+
+            <div class="glass">
+              <div class="avatar">
+                <svg viewBox="0 0 32 32" width="17" height="17">
+                  <ellipse cx="16" cy="18" rx="10" ry="9" fill="#ff9533"/>
+                  <path d="M7 11 L10 4 L14 11 Z" fill="#ff9533"/>
+                  <path d="M9 10 L10 6 L13 10 Z" fill="#fff0d4"/>
+                  <path d="M25 11 L22 4 L18 11 Z" fill="#ff9533"/>
+                  <path d="M23 10 L22 6 L19 10 Z" fill="#fff0d4"/>
+                  <ellipse cx="16" cy="21" rx="6.5" ry="5" fill="#fff9ee"/>
+                  <circle cx="12.5" cy="16" r="1.5" fill="#1c1917"/>
+                  <circle cx="19.5" cy="16" r="1.5" fill="#1c1917"/>
+                  <ellipse cx="16" cy="19.5" rx="1.8" ry="1.2" fill="#1c1917"/>
+                  <path d="M9 25 L23 25 L16 30 Z" fill="#0a84ff"/>
+                  <circle cx="16" cy="27" r="1" fill="#fff"/>
+                </svg>
+              </div>
+              <div class="hud-sep"></div>
+              <div class="hud-hearts" id="hudHearts"></div>
+              <div class="hud-sep"></div>
+              <div class="hud-stars">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="var(--yellow)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <span id="hudStarCount">0</span><span style="color:var(--label-tertiary);font-weight:400;">/10</span>
+              </div>
+            </div>
+
+            <div class="hud-score-group">
+              <div class="glass hud-score-box">
+                <span class="score-label">SCORE</span>
+                <span id="hudScore" class="score-val">0</span>
+              </div>
+              <div class="hud-powerups" id="hudPowerupBar"></div>
+            </div>
+
+            <div class="glass">
+              <div class="hud-stage">
+                <span id="hudStageBadge" class="hud-stage-name">Stage 1</span>
+              </div>
+              <div class="hud-sep"></div>
+              <button id="hudDifficultyBadge" class="diff-badge" title="Cycle difficulty" type="button">NORMAL</button>
+              <div class="hud-sep"></div>
+              <div class="hud-best">
+                <span style="font-size:9px;letter-spacing:0.05em;color:var(--label-tertiary);font-weight:600;">BEST </span>
+                <span id="hudHighScore">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start modal -->
+        <div class="modal active" id="modalStart">
+          <div class="sheet">
+            <div class="sheet-icon char">
+              <svg viewBox="0 0 64 64" width="44" height="44">
+                <ellipse cx="32" cy="36" rx="20" ry="18" fill="#ff9533"/>
+                <path d="M14 24 L20 10 L28 22 Z" fill="#ff9533"/>
+                <path d="M17 22 L20 13 L25 21 Z" fill="#fff0d4"/>
+                <path d="M50 24 L44 10 L36 22 Z" fill="#ff9533"/>
+                <path d="M47 22 L44 13 L39 21 Z" fill="#fff0d4"/>
+                <ellipse cx="32" cy="42" rx="14" ry="10" fill="#fff9ee"/>
+                <circle cx="25" cy="33" r="3.2" fill="#1c1917"/>
+                <circle cx="26.5" cy="32" r="1.2" fill="#fff"/>
+                <circle cx="39" cy="33" r="3.2" fill="#1c1917"/>
+                <circle cx="40.5" cy="32" r="1.2" fill="#fff"/>
+                <ellipse cx="32" cy="39" rx="3" ry="2" fill="#1c1917"/>
+                <path d="M18 48 L46 48 L32 58 Z" fill="#0a84ff"/>
+                <circle cx="32" cy="52" r="1.8" fill="#fff"/>
+              </svg>
+            </div>
+            <h1 class="h1">Wordyssey</h1>
+            <p class="sub">Explore floating worlds, leap across chasms, and master English vocabulary with Wordi the Inu.</p>
+
+            <div class="diff-picker">
+              <div class="diff-label">Difficulty</div>
+              <div class="seg" id="difficultyPicker">
+                <button class="seg-btn" data-diff="casual" type="button"><span class="seg-dot"></span><span>Casual</span></button>
+                <button class="seg-btn on" data-diff="normal" type="button"><span class="seg-dot"></span><span>Normal</span></button>
+                <button class="seg-btn" data-diff="hero" type="button"><span class="seg-dot"></span><span>Hero 2x</span></button>
+              </div>
+              <div id="difficultyDesc" class="diff-desc">3 Hearts · Standard Pace · 12s Quiz · 1.25x</div>
+            </div>
+
+            <table class="keys">
+              <tbody>
+                <tr><td>Move</td><td><kbd>A</kbd> <kbd>D</kbd> or <kbd>Left</kbd> <kbd>Right</kbd></td></tr>
+                <tr><td>Jump</td><td><kbd>W</kbd> or <kbd>Space</kbd></td></tr>
+                <tr><td>Bark Blast</td><td><kbd>J</kbd> or <kbd>Click</kbd></td></tr>
+                <tr><td>Pause</td><td><kbd>Esc</kbd></td></tr>
+                <tr><td>Restart</td><td><kbd>R</kbd></td></tr>
+              </tbody>
+            </table>
+
+            <div class="btn-stack">
+              <button id="btnStartGame" class="btn-primary" type="button">Start Adventure</button>
+              <button id="btnReturnToMapFromStart" class="btn-secondary" type="button">World Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz modal -->
+        <div class="modal" id="modalWordChallenge">
+          <div class="sheet" style="max-width:440px;">
+            <span class="quiz-tag">Word Challenge</span>
+            <h2 class="h2">Identify the Item</h2>
+            <p class="sub" style="margin-bottom:8px;">Choose correctly for a Shield and +500 pts.</p>
+            <div class="quiz-box">
+              <canvas id="quizClueCanvas" width="96" height="96" class="quiz-clue-canvas"></canvas>
+              <div class="quiz-q" id="quizQuestionText">What is this?</div>
+            </div>
+            <div class="quiz-grid" id="quizOptionsGrid"></div>
+            <div class="progress-track"><div class="progress-fill" id="quizTimerFill"></div></div>
+          </div>
+        </div>
+
+        <!-- Pause -->
+        <div class="modal" id="modalPause">
+          <div class="sheet">
+            <h2 class="h2">Paused</h2>
+            <p class="sub">Wordi is waiting on the cliffs.</p>
+            <div class="btn-stack">
+              <button id="btnResume" class="btn-primary" type="button">Resume</button>
+              <button id="btnRestartFromPause" class="btn-secondary" type="button">Restart Stage</button>
+              <button id="btnReturnToMapFromPause" class="btn-secondary" type="button">World Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage Clear -->
+        <div class="modal" id="modalStageClear">
+          <div class="sheet">
+            <div class="sheet-icon trophy">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="var(--yellow)"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+            </div>
+            <h2 class="h2">Stage Complete</h2>
+            <p class="sub">All 10 stars collected.</p>
+            <div class="reward-box"><p>+1,000 PTS · +3 Stars · +50 Coins</p></div>
+            <div class="btn-stack">
+              <button id="btnNextStage" class="btn-primary" type="button">Next Stage</button>
+              <button id="btnReturnToMapWin" class="btn-secondary" type="button">World Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Over -->
+        <div class="modal" id="modalGameOver">
+          <div class="sheet">
+            <div class="sheet-icon fail">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--red)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <h2 class="h2">Game Over</h2>
+            <p class="sub">Every journey starts one word at a time.</p>
+            <table class="keys">
+              <tbody>
+                <tr><td>Final Score</td><td id="goFinalScore" style="font-family:var(--sf-mono);">0</td></tr>
+                <tr><td>Best</td><td id="goHighScore" style="font-family:var(--sf-mono);color:var(--yellow);">0</td></tr>
+                <tr><td>Stage</td><td id="goStage">Stage 1</td></tr>
+                <tr><td>Words Learned</td><td id="goWords" style="color:var(--blue);">0</td></tr>
+              </tbody>
+            </table>
+            <div class="btn-stack">
+              <button id="btnRestartGameOver" class="btn-primary" type="button">Try Again</button>
+              <button id="btnReturnToMapFail" class="btn-secondary" type="button">World Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touch -->
+        <div class="touch" id="touchControls">
+          <div class="touch-grp">
+            <button class="touch-btn" id="btnTouchLeft" aria-label="Left" type="button"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+            <button class="touch-btn" id="btnTouchRight" aria-label="Right" type="button"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+          </div>
+          <div class="touch-grp">
+            <button class="touch-btn" id="btnTouchJump" aria-label="Jump" type="button"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg></button>
+            <button class="touch-btn action" id="btnTouchBark" aria-label="Bark" type="button"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: Quiz Arena -->
+    <section id="viewQuizArena" class="view">
+      <div class="arena">
+        <div class="arena-header">
+          <span class="quiz-tag" style="margin:0;">Training Arena</span>
+          <button id="btnReturnToMapFromQuiz" class="btn-secondary" style="height:28px;padding:0 12px;font-size:11.5px;" type="button">World Map</button>
+        </div>
+        <h2 class="h2">Vocabulary Mastery</h2>
+        <p class="sub" style="margin-bottom:6px;">Build streaks, earn Stars and Coins.</p>
+
+        <div class="arena-filters" id="arenaTopicFilters">
+          <button class="filter-btn on" data-topic="all" type="button">All</button>
+          <button class="filter-btn" data-topic="food" type="button">Food</button>
+          <button class="filter-btn" data-topic="animals" type="button">Animals</button>
+          <button class="filter-btn" data-topic="objects" type="button">Objects</button>
+          <button class="filter-btn" data-topic="places" type="button">Places</button>
+        </div>
+
+        <div class="arena-stats">
+          <div>Streak: <strong id="arenaStreak" style="color:var(--orange);">0x</strong></div>
+          <div>Accuracy: <strong id="arenaAccuracy" style="color:var(--green);">100%</strong></div>
+          <div>Coins: <strong id="arenaCoins" style="color:var(--yellow);">+0</strong></div>
+        </div>
+
+        <div class="arena-stage">
+          <canvas id="arenaClueCanvas" width="100" height="100" class="quiz-clue-canvas"></canvas>
+          <div id="arenaQuestionPrompt" style="font-size:15px;font-weight:600;margin-bottom:4px;">Choose the correct word</div>
+          <button id="btnPlayWordAudio" class="arena-audio" type="button">
+            <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+            Pronounce
+          </button>
+        </div>
+
+        <div class="arena-grid" id="arenaChoicesGrid"></div>
+        <div style="font-size:11.5px;color:var(--label-tertiary);">Correct = +10 Coins · 5+ Streak = Star Trophy</div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: Profile -->
+    <section id="viewProfile" class="view">
+      <div class="profile">
+        <div class="profile-top">
+          <div>
+            <h2 class="h2" style="text-align:left;margin-bottom:2px;">Wordi the Inu</h2>
+            <p class="sub" style="text-align:left;">Character design, expressions, and color palette.</p>
+          </div>
+          <button id="btnReturnToMapFromProfile" class="btn-secondary" style="height:30px;padding:0 14px;font-size:12px;" type="button">World Map</button>
+        </div>
+
+        <div class="profile-hero">
+          <div class="profile-avatar">
+            <canvas id="profileFaceCanvas" width="180" height="180"></canvas>
+          </div>
+          <div class="meta-grid">
+            <div class="meta-card"><div class="meta-label-text">Name</div><div class="meta-val-text">Wordi the Inu</div></div>
+            <div class="meta-card"><div class="meta-label-text">Personality</div><div class="meta-val-text">Friendly, Cheerful, Adventurous</div></div>
+            <div class="meta-card"><div class="meta-label-text">Role</div><div class="meta-val-text">Companion in English Discovery</div></div>
+            <div class="meta-card"><div class="meta-label-text">Philosophy</div><div class="meta-val-text">"Word" + "Odyssey" = Wordyssey</div></div>
+          </div>
+        </div>
+
+        <div class="section-label">Expressions</div>
+        <div class="expr-grid">
+          <div class="expr-card on" data-expr="happy">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 13.5s1.5 2.5 4 2.5 4-2.5 4-2.5"/><circle cx="9" cy="9.5" r="1" fill="#ff9f0a"/><circle cx="15" cy="9.5" r="1" fill="#ff9f0a"/></svg>
+            <div class="expr-name">Happy</div>
+          </div>
+          <div class="expr-card" data-expr="surprised">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#64d2ff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="15" r="2.5" fill="#64d2ff"/><circle cx="9" cy="9.5" r="1.2" fill="#64d2ff"/><circle cx="15" cy="9.5" r="1.2" fill="#64d2ff"/></svg>
+            <div class="expr-name">Surprised</div>
+          </div>
+          <div class="expr-card" data-expr="sad">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><circle cx="9" cy="10" r="1" fill="#0a84ff"/><circle cx="15" cy="10" r="1" fill="#0a84ff"/></svg>
+            <div class="expr-name">Sad</div>
+          </div>
+          <div class="expr-card" data-expr="excited">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#ff375f" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 13.5s1.5 3 4 3 4-3 4-3"/></svg>
+            <div class="expr-name">Excited</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="section-label">Character Views</div>
+          <div class="expr-grid" style="grid-template-columns:repeat(3,1fr);">
+            <div class="expr-card character-view-btn on" data-view="front"><div style="font-size:12px;font-weight:600;">Front</div><div class="expr-name" style="margin-top:2px;">Portrait</div></div>
+            <div class="expr-card character-view-btn" data-view="side"><div style="font-size:12px;font-weight:600;">Side</div><div class="expr-name" style="margin-top:2px;">Running</div></div>
+            <div class="expr-card character-view-btn" data-view="back"><div style="font-size:12px;font-weight:600;">Back</div><div class="expr-name" style="margin-top:2px;">Tail</div></div>
+          </div>
+        </div>
+
+        <div class="section-label">Color Palette</div>
+        <div class="swatch-grid">
+          <div class="swatch"><div class="swatch-dot" style="background:#ff9533;"></div><div><div class="swatch-label">Orange</div><div class="swatch-desc">Energy</div></div></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#fff4e0;"></div><div><div class="swatch-label">Cream</div><div class="swatch-desc">Warmth</div></div></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#0a84ff;"></div><div><div class="swatch-label">Blue</div><div class="swatch-desc">Trust</div></div></div>
+          <div class="swatch"><div class="swatch-dot" style="background:#ff9eaa;"></div><div><div class="swatch-label">Pink</div><div class="swatch-desc">Cheer</div></div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Floating Dock -->
+  <nav class="dock" id="mainDock">
+    <button class="dock-btn on" data-tab="map" type="button">
+      <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+      <span>World Map</span>
+    </button>
+    <button class="dock-btn" data-tab="game" type="button">
+      <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+      <span>Action Game</span>
+    </button>
+    <button class="dock-btn" data-tab="quiz" type="button">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      <span>Quiz Arena</span>
+    </button>
+    <button class="dock-btn" data-tab="profile" type="button">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>Profile</span>
+    </button>
+  </nav>
+
+  <script src="sound.js"></script>
+  <script src="game.js"></script>
+  <script src="enhance.js"></script>
+</body>
+</html>

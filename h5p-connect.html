@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordyssey — Connect GitHub &amp; Lumi (.h5p)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+  <style>
+    body {
+      min-height: 100vh;
+      padding-bottom: 48px;
+      overflow-y: auto;
+    }
+    .h5p-shell {
+      max-width: 920px;
+      margin: 26px auto 0;
+      padding: 0 18px;
+      display: grid;
+      gap: 18px;
+    }
+    .h5p-card {
+      background: var(--surface);
+      border: 2px solid var(--label);
+      border-radius: var(--r-lg);
+      box-shadow: 6px 6px 0 var(--orange);
+      padding: 24px 26px;
+    }
+    .h5p-card.secondary {
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+    .h5p-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .h5p-box {
+      background: var(--surface-elevated);
+      border: 2px solid var(--separator-subtle);
+      border-radius: var(--r-md);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .h5p-label {
+      display: block;
+      font-family: var(--sf-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+    .h5p-input {
+      width: 100%;
+      box-sizing: border-box;
+      height: 44px;
+      padding: 0 14px;
+      border-radius: var(--r-md);
+      border: 2px solid var(--label);
+      background: var(--bg);
+      color: var(--label);
+      font-family: var(--sf-mono);
+      font-size: 13px;
+    }
+    .h5p-input:focus {
+      outline: 3px solid var(--lime);
+      outline-offset: 2px;
+    }
+    .h5p-badge {
+      display: inline-block;
+      font-family: var(--sf-mono);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: var(--lime);
+      color: var(--ink);
+    }
+    .h5p-badge.alt {
+      background: var(--teal);
+    }
+    .h5p-status {
+      font-family: var(--sf-mono);
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: var(--r-sm);
+      border: 1.5px solid var(--separator-subtle);
+      background: var(--bg);
+      color: var(--label-secondary);
+      margin-top: 12px;
+    }
+    .h5p-status.ok {
+      border-color: var(--lime);
+      color: var(--lime);
+    }
+    .h5p-status.err {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .h5p-steps {
+      margin: 10px 0 0 18px;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--label-secondary);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .h5p-steps strong { color: var(--label); }
+    .h5p-file-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" style="text-decoration:none;color:inherit;">
+        <svg viewBox="0 0 24 24" width="18" height="18">
+          <ellipse cx="12" cy="14" rx="4.5" ry="3.5" fill="#ff9f0a"/>
+          <circle cx="6.5" cy="8.5" r="2.2" fill="#ff9f0a"/>
+          <circle cx="10" cy="5.5" r="2.2" fill="#ff9f0a"/>
+          <circle cx="14" cy="5.5" r="2.2" fill="#ff9f0a"/>
+          <circle cx="17.5" cy="8.5" r="2.2" fill="#ff9f0a"/>
+        </svg>
+        <span class="brand-name">Wordyssey</span>
+        <span class="brand-sep"></span>
+        <span class="brand-sub">H5P &amp; Lumi Connector</span>
+      </a>
+      <div class="nav-group">
+        <a href="index.html" class="btn-secondary" style="height:34px;padding:0 14px;display:inline-flex;align-items:center;text-decoration:none;font-size:12.5px;">Back to Game</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="h5p-shell">
+    <section class="h5p-card">
+      <span class="quiz-tag">Game Map + Course Presentation Builder</span>
+      <h1 class="h2" style="margin-top:10px;margin-bottom:6px;text-align:left;">Connect Wordyssey HTML5 to Lumi</h1>
+      <p class="sub" style="text-align:left;margin-bottom:16px;">
+        Generate your <strong>Game Map (.h5p)</strong> or <strong>Course Presentation (.h5p)</strong> package linked directly to your live GitHub Pages game URL. Works in both <strong>Lumi Cloud</strong> (<code>app.lumi.education</code>) and <strong>Lumi Desktop</strong>.
+      </p>
+
+      <div class="h5p-row" style="margin-top:0;">
+        <div>
+          <label class="h5p-label" for="gameUrlInput">Hosted HTML5 Game URL (GitHub Pages)</label>
+          <input class="h5p-input" id="gameUrlInput" type="url" placeholder="https://your-username.github.io/wordyssey/">
+        </div>
+        <div>
+          <label class="h5p-label" for="pkgTitleInput">Lumi Presentation Title</label>
+          <input class="h5p-input" id="pkgTitleInput" type="text" value="Wordyssey: Wordi's English Odyssey">
+        </div>
+      </div>
+
+      <div id="localFilePickerWrap" class="h5p-file-row hidden">
+        <span style="font-size:12.5px;color:var(--yellow);">Opened via <code>file://</code> — select a template from <code>h5p/</code> (e.g. <code>wordyssey-game-map.h5p</code>) to patch offline:</span>
+        <input type="file" id="manualCpFile" accept=".h5p,.zip" style="color:var(--label);font-size:12px;">
+      </div>
+
+      <div class="h5p-row">
+        <div class="h5p-box" style="border-color:var(--lime);">
+          <div>
+            <span class="h5p-badge">Primary · H5P.GameMap + Course Presentation</span>
+            <h3 style="margin:10px 0 6px;font-size:17px;">Game Map (.h5p)</h3>
+            <p style="margin:0;font-size:13px;color:var(--label-secondary);line-height:1.45;">
+              Uses <code>H5P.GameMap</code> over Wordyssey's 5-island map with <strong>Course Presentation</strong> stages (not Tabs), Drag the Words, True/False, Memory Game, Flashcards, Speed Quiz, and live HTML5 game links.
+            </p>
+          </div>
+          <button id="btnBuildGameMap" class="btn-primary" type="button">Download Game Map .h5p</button>
+        </div>
+
+        <div class="h5p-box">
+          <div>
+            <span class="h5p-badge alt">Standalone · Course Presentation</span>
+            <h3 style="margin:10px 0 6px;font-size:17px;">Course Presentation (.h5p)</h3>
+            <p style="margin:0;font-size:13px;color:var(--label-secondary);line-height:1.45;">
+              10-slide standalone <code>H5P.CoursePresentation</code> with Wordi artwork, flashcards, Multiple Choice &amp; Single Choice quizzes, Summary score slide, and launch links to your HTML5 game.
+            </p>
+          </div>
+          <button id="btnBuildCoursePresentation" class="btn-secondary" style="height:44px;font-size:13px;" type="button">Download Course Presentation .h5p</button>
+        </div>
+
+        <div class="h5p-box">
+          <div>
+            <span class="h5p-badge alt">Optional · IFrameEmbed</span>
+            <h3 style="margin:10px 0 6px;font-size:17px;">Direct IFrame Embed (.h5p)</h3>
+            <p style="margin:0;font-size:13px;color:var(--label-secondary);line-height:1.45;">
+              Uses official <code>H5P.IFrameEmbed</code> pointing directly to your GitHub Pages game URL so the playable HTML5 game opens inside an H5P frame (for Lumi Desktop / LMS with IFrameEmbed).
+            </p>
+          </div>
+          <button id="btnBuildIframeUrl" class="btn-secondary" style="height:44px;font-size:13px;" type="button">Download IFrame Embed .h5p</button>
+        </div>
+      </div>
+
+      <div id="statusBox" class="h5p-status">Ready. Verify your GitHub Pages URL above and click Download Game Map .h5p.</div>
+    </section>
+
+    <section class="h5p-card secondary">
+      <h2 class="h2" style="text-align:left;font-size:20px;margin-bottom:8px;">How to Submit for School (GitHub + Lumi)</h2>
+      <ol class="h5p-steps">
+        <li><strong>Upload to GitHub:</strong> Push all files inside this folder (<code>index.html</code>, <code>h5p/</code>, <code>scripts/</code>, etc.) to your GitHub repository, then enable <strong>Settings &rarr; Pages &rarr; Deploy from branch (<code>main</code> / <code>root</code>)</strong>.</li>
+        <li><strong>Open this page on GitHub Pages:</strong> Visit <code>https://&lt;your-username&gt;.github.io/&lt;repo-name&gt;/h5p-connect.html</code>. Your live game URL is auto-detected!</li>
+        <li><strong>Download <code>wordyssey-game-map.h5p</code>:</strong> Click <strong>Download Game Map .h5p</strong> above so every Course Presentation link and the Final Stage map link point directly to your live GitHub game.</li>
+        <li><strong>Connect in Lumi:</strong> Upload <code>wordyssey-game-map.h5p</code> in <strong>Lumi Cloud</strong> (<code>app.lumi.education</code>) or open it in <strong>Lumi Desktop</strong>.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const urlInput = document.getElementById('gameUrlInput');
+      const titleInput = document.getElementById('pkgTitleInput');
+      const statusBox = document.getElementById('statusBox');
+      const manualWrap = document.getElementById('localFilePickerWrap');
+      const manualInput = document.getElementById('manualCpFile');
+
+      const setStatus = (msg, kind = '') => {
+        statusBox.textContent = msg;
+        statusBox.className = 'h5p-status' + (kind ? ' ' + kind : '');
+      };
+
+      // Auto-detect hosted URL when served over HTTP(S)
+      if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+        urlInput.value = new URL('./', window.location.href).href;
+      } else {
+        urlInput.value = 'https://your-username.github.io/wordyssey/';
+        manualWrap.classList.remove('hidden');
+      }
+
+      /* ---- Minimal Zero-Dependency ZIP Reader & Patcher (preserves untouched DEFLATE entries verbatim) ---- */
+      const crcTable = (() => {
+        const t = new Uint32Array(256);
+        for (let i = 0; i < 256; i++) {
+          let c = i;
+          for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+          t[i] = c >>> 0;
+        }
+        return t;
+      })();
+
+      const crc32 = (bytes) => {
+        let c = 0xffffffff;
+        for (let i = 0; i < bytes.length; i++) c = crcTable[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
+        return (c ^ 0xffffffff) >>> 0;
+      };
+
+      async function inflateRaw(bytes) {
+        if (typeof DecompressionStream === 'undefined') {
+          throw new Error('Browser does not support DecompressionStream; use scripts/build_h5p.py instead.');
+        }
+        const ds = new DecompressionStream('deflate-raw');
+        const w = ds.writable.getWriter();
+        w.write(bytes);
+        w.close();
+        return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+      }
+
+      async function deflateRaw(bytes) {
+        if (typeof CompressionStream === 'undefined') return null;
+        const cs = new CompressionStream('deflate-raw');
+        const w = cs.writable.getWriter();
+        w.write(bytes);
+        w.close();
+        return new Uint8Array(await new Response(cs.readable).arrayBuffer());
+      }
+
+      function parseZip(buffer) {
+        const bytes = new Uint8Array(buffer);
+        const dv = new DataView(buffer);
+        const dec = new TextDecoder('utf-8');
+
+        let eocd = -1;
+        for (let i = bytes.length - 22; i >= Math.max(0, bytes.length - 65557); i--) {
+          if (dv.getUint32(i, true) === 0x06054b50) {
+            eocd = i;
+            break;
+          }
+        }
+        if (eocd === -1) throw new Error('Invalid .h5p archive (missing ZIP EOCD).');
+
+        const cdCount = dv.getUint16(eocd + 10, true);
+        const cdOffset = dv.getUint32(eocd + 16, true);
+        const entries = [];
+        let ptr = cdOffset;
+
+        for (let i = 0; i < cdCount; i++) {
+          if (dv.getUint32(ptr, true) !== 0x02014b50) throw new Error('Corrupt ZIP central directory.');
+          const flags = dv.getUint16(ptr + 8, true);
+          const method = dv.getUint16(ptr + 10, true);
+          const mtime = dv.getUint16(ptr + 12, true);
+          const mdate = dv.getUint16(ptr + 14, true);
+          const crc = dv.getUint32(ptr + 16, true);
+          const compSize = dv.getUint32(ptr + 20, true);
+          const uncompSize = dv.getUint32(ptr + 24, true);
+          const nameLen = dv.getUint16(ptr + 28, true);
+          const extraLen = dv.getUint16(ptr + 30, true);
+          const commentLen = dv.getUint16(ptr + 32, true);
+          const extAttr = dv.getUint32(ptr + 38, true);
+          const lfhOffset = dv.getUint32(ptr + 42, true);
+          const nameBytes = bytes.slice(ptr + 46, ptr + 46 + nameLen);
+          const name = dec.decode(nameBytes);
+
+          if (dv.getUint32(lfhOffset, true) !== 0x04034b50) throw new Error('Corrupt ZIP local header: ' + name);
+          const lfhNameLen = dv.getUint16(lfhOffset + 26, true);
+          const lfhExtraLen = dv.getUint16(lfhOffset + 28, true);
+          const dataStart = lfhOffset + 30 + lfhNameLen + lfhExtraLen;
+          const compressedData = bytes.slice(dataStart, dataStart + compSize);
+
+          entries.push({ name, nameBytes, flags, method, mtime, mdate, crc, compSize, uncompSize, extAttr, compressedData });
+          ptr += 46 + nameLen + extraLen + commentLen;
+        }
+        return entries;
+      }
+
+      async function readEntryText(entry) {
+        let raw = entry.compressedData;
+        if (entry.method === 8) raw = await inflateRaw(raw);
+        else if (entry.method !== 0) throw new Error('Unsupported ZIP method ' + entry.method);
+        return new TextDecoder('utf-8').decode(raw);
+      }
+
+      async function replaceEntryText(entry, text) {
+        const raw = new TextEncoder().encode(text);
+        const crc = crc32(raw);
+        const deflated = await deflateRaw(raw);
+        if (deflated && deflated.length < raw.length) {
+          entry.method = 8;
+          entry.compressedData = deflated;
+          entry.compSize = deflated.length;
+        } else {
+          entry.method = 0;
+          entry.compressedData = raw;
+          entry.compSize = raw.length;
+        }
+        entry.uncompSize = raw.length;
+        entry.crc = crc;
+        entry.flags = 0x0800; // UTF-8 filename
+      }
+
+      function buildZip(entries) {
+        const localParts = [];
+        const cdParts = [];
+        let offset = 0;
+
+        for (const e of entries) {
+          const nameBytes = e.nameBytes || new TextEncoder().encode(e.name);
+          const lfh = new ArrayBuffer(30);
+          const lv = new DataView(lfh);
+          lv.setUint32(0, 0x04034b50, true);
+          lv.setUint16(4, 20, true);
+          lv.setUint16(6, e.flags & ~0x0008, true); // strip data descriptor flag if any
+          lv.setUint16(8, e.method, true);
+          lv.setUint16(10, e.mtime || 0, true);
+          lv.setUint16(12, e.mdate || 0x5421, true);
+          lv.setUint32(14, e.crc >>> 0, true);
+          lv.setUint32(18, e.compSize >>> 0, true);
+          lv.setUint32(22, e.uncompSize >>> 0, true);
+          lv.setUint16(26, nameBytes.length, true);
+          lv.setUint16(28, 0, true);
+
+          localParts.push(new Uint8Array(lfh), nameBytes, e.compressedData);
+
+          const cdh = new ArrayBuffer(46);
+          const cv = new DataView(cdh);
+          cv.setUint32(0, 0x02014b50, true);
+          cv.setUint16(4, 20, true);
+          cv.setUint16(6, 20, true);
+          cv.setUint16(8, e.flags & ~0x0008, true);
+          cv.setUint16(10, e.method, true);
+          cv.setUint16(12, e.mtime || 0, true);
+          cv.setUint16(14, e.mdate || 0x5421, true);
+          cv.setUint32(16, e.crc >>> 0, true);
+          cv.setUint32(20, e.compSize >>> 0, true);
+          cv.setUint32(24, e.uncompSize >>> 0, true);
+          cv.setUint16(28, nameBytes.length, true);
+          cv.setUint16(30, 0, true);
+          cv.setUint16(32, 0, true);
+          cv.setUint16(34, 0, true);
+          cv.setUint16(36, 0, true);
+          cv.setUint32(38, e.extAttr || 0, true);
+          cv.setUint32(42, offset >>> 0, true);
+
+          cdParts.push(new Uint8Array(cdh), nameBytes);
+          offset += 30 + nameBytes.length + e.compressedData.length;
+        }
+
+        let cdSize = 0;
+        for (const p of cdParts) cdSize += p.length;
+
+        const eocd = new ArrayBuffer(22);
+        const ev = new DataView(eocd);
+        ev.setUint32(0, 0x06054b50, true);
+        ev.setUint16(4, 0, true);
+        ev.setUint16(6, 0, true);
+        ev.setUint16(8, entries.length, true);
+        ev.setUint16(10, entries.length, true);
+        ev.setUint32(12, cdSize >>> 0, true);
+        ev.setUint32(16, offset >>> 0, true);
+        ev.setUint16(20, 0, true);
+
+        return new Blob([...localParts, ...cdParts, new Uint8Array(eocd)], { type: 'application/zip' });
+      }
+
+      function splitUrl(rawUrl) {
+        const u = rawUrl.trim();
+        if (u.startsWith('https://')) return ['https://', u.slice(8)];
+        if (u.startsWith('http://')) return ['http://', u.slice(7)];
+        if (u.startsWith('/')) return ['/', u.slice(1)];
+        return ['https://', u];
+      }
+
+      function downloadBlob(blob, filename) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+      }
+
+      async function loadTemplateBuffer(relativePath, manualInputEl) {
+        if (window.location.protocol === 'file:') {
+          if (manualInputEl && manualInputEl.files && manualInputEl.files[0]) {
+            return await manualInputEl.files[0].arrayBuffer();
+          }
+          throw new Error('Select the template .h5p file above first, or run via GitHub Pages / localhost.');
+        }
+        const res = await fetch(relativePath);
+        if (!res.ok) throw new Error('Could not load ' + relativePath + ' (HTTP ' + res.status + ').');
+        return await res.arrayBuffer();
+      }
+
+      function patchLinksRecursive(obj, proto, rest) {
+        let count = 0;
+        if (!obj || typeof obj !== 'object') return 0;
+        if (Array.isArray(obj)) {
+          for (const item of obj) count += patchLinksRecursive(item, proto, rest);
+          return count;
+        }
+        if (typeof obj.library === 'string' && obj.library.startsWith('H5P.Link') && obj.params) {
+          obj.params.linkWidget = { protocol: proto, url: rest };
+          count++;
+        }
+        if (obj.specialStageType === 'link' && typeof obj.specialStageLinkURL === 'string') {
+          obj.specialStageLinkURL = proto + rest;
+          count++;
+        }
+        for (const k of Object.keys(obj)) {
+          count += patchLinksRecursive(obj[k], proto, rest);
+        }
+        return count;
+      }
+
+      async function buildPatchedArchive(templatePath, downloadName) {
+        const targetUrl = urlInput.value.trim();
+        const title = titleInput.value.trim() || "Wordyssey: Wordi's English Odyssey";
+        if (!/^https?:\/\//i.test(targetUrl)) {
+          setStatus('Please enter a valid http:// or https:// URL for your hosted game.', 'err');
+          return;
+        }
+        setStatus(`Building ${downloadName} ...`);
+        const buf = await loadTemplateBuffer(templatePath, manualInput);
+        const entries = parseZip(buf);
+
+        const h5pEntry = entries.find((e) => e.name === 'h5p.json');
+        const contentEntry = entries.find((e) => e.name === 'content/content.json');
+        if (!h5pEntry || !contentEntry) throw new Error('Invalid .h5p template.');
+
+        const h5pJson = JSON.parse(await readEntryText(h5pEntry));
+        h5pJson.title = title;
+        await replaceEntryText(h5pEntry, JSON.stringify(h5pJson));
+
+        const contentJson = JSON.parse(await readEntryText(contentEntry));
+        const [proto, rest] = splitUrl(targetUrl);
+        const updatedLinks = patchLinksRecursive(contentJson, proto, rest);
+        await replaceEntryText(contentEntry, JSON.stringify(contentJson));
+
+        const outBlob = buildZip(entries);
+        downloadBlob(outBlob, downloadName);
+        setStatus(`Downloaded ${downloadName} (${(outBlob.size / 1024 / 1024).toFixed(2)} MB) with ${updatedLinks} game links set to ${targetUrl}`, 'ok');
+      }
+
+      document.getElementById('btnBuildGameMap').onclick = async () => {
+        try {
+          await buildPatchedArchive('h5p/wordyssey-game-map.h5p', 'wordyssey-game-map.h5p');
+        } catch (err) {
+          setStatus(err.message || String(err), 'err');
+        }
+      };
+
+      document.getElementById('btnBuildCoursePresentation').onclick = async () => {
+        try {
+          await buildPatchedArchive('h5p/wordyssey-course-presentation.h5p', 'wordyssey-course-presentation.h5p');
+        } catch (err) {
+          setStatus(err.message || String(err), 'err');
+        }
+      };
+
+      document.getElementById('btnBuildIframeUrl').onclick = async () => {
+        try {
+          const targetUrl = urlInput.value.trim();
+          const title = titleInput.value.trim() || "Wordyssey: Wordi's English Odyssey";
+          if (!/^https?:\/\//i.test(targetUrl)) {
+            setStatus('Please enter a valid http:// or https:// URL for your hosted game.', 'err');
+            return;
+          }
+          if (window.location.protocol === 'file:') {
+            setStatus('Open via GitHub Pages or localhost (or run python scripts/build_h5p.py --iframe-url ...) to build the URL-linked IFrame package.', 'err');
+            return;
+          }
+          setStatus('Building wordyssey-iframe-embed.h5p ...');
+          const buf = await loadTemplateBuffer('h5p/wordyssey-iframe-embed.h5p', null);
+          const entries = parseZip(buf).filter((e) => e.name !== 'content/wordyssey.html');
+
+          const h5pEntry = entries.find((e) => e.name === 'h5p.json');
+          const contentEntry = entries.find((e) => e.name === 'content/content.json');
+          const h5pJson = JSON.parse(await readEntryText(h5pEntry));
+          h5pJson.title = title + ' (Live URL Embed)';
+          await replaceEntryText(h5pEntry, JSON.stringify(h5pJson));
+
+          const contentJson = JSON.parse(await readEntryText(contentEntry));
+          contentJson.source = targetUrl;
+          await replaceEntryText(contentEntry, JSON.stringify(contentJson));
+
+          const outBlob = buildZip(entries);
+          downloadBlob(outBlob, 'wordyssey-iframe-embed.h5p');
+          setStatus(`Downloaded wordyssey-iframe-embed.h5p pointing to ${targetUrl}`, 'ok');
+        } catch (err) {
+          setStatus(err.message || String(err), 'err');
+        }
+      };
+
+      // Expose helpers for automated test verification
+      window.__wordysseyH5P = { parseZip, readEntryText, replaceEntryText, buildZip, splitUrl, patchLinksRecursive };
+    })();
+  </script>
+</body>
+</html>

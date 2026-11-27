@@ -1,0 +1,77 @@
+/* Wordyssey v2 — ink & sticker theme. Loads after style.css and overrides it. */
+:root{--bg:#0f0e13;--surface:#17161d;--surface-elevated:#211f29;--label:#f4efe6;--label-secondary:rgba(244,239,230,.68);--label-tertiary:rgba(244,239,230,.42);--separator:#f4efe6;--separator-subtle:rgba(244,239,230,.16);--specular-top:transparent;--fill-quaternary:rgba(244,239,230,.07);--fill-tertiary:rgba(244,239,230,.13);--blue:#5b7cff;--orange:#ff7a1a;--yellow:#ffd43b;--green:#b6ff3d;--red:#ff4d5e;--teal:#5ce1e6;--lime:#c6ff3d;--ink:#0b0a0e;--sf:"Bricolage Grotesque","Arial Black",system-ui,sans-serif;--sf-mono:"DM Mono",ui-monospace,Menlo,monospace;--r-xs:4px;--r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:16px;--r-full:9px}
+::selection{background:var(--lime);color:var(--ink)}
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+body{background:radial-gradient(900px 420px at 12% -8%,rgba(255,122,26,.18),transparent 62%),radial-gradient(rgba(244,239,230,.07) 1px,transparent 1.3px) 0 0/24px 24px,var(--bg);letter-spacing:-.01em}
+
+/* chrome */
+.nav{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:2px solid var(--label)}
+.brand-name{font-weight:800;font-size:19px;letter-spacing:-.04em;text-transform:uppercase}
+.brand-sub{font-family:var(--sf-mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--orange)}
+.glass,.pill,.map-diff,.map-bar,.dock,.toast,.node-card,.chip,.buff{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;border:2px solid var(--label);box-shadow:3px 3px 0 var(--ink)}
+.dock{bottom:16px;padding:4px;box-shadow:4px 4px 0 var(--orange)}
+.dock-btn{font-weight:700;border-radius:6px}
+.dock-btn.on{background:var(--lime);color:var(--ink);box-shadow:none}
+button.pill.on{background:var(--lime);color:var(--ink)}
+.seg{background:var(--ink);border:2px solid var(--separator-subtle);box-shadow:none;padding:2px}
+.seg-btn{font-weight:700;border-radius:6px;height:26px}
+.seg-btn.on{background:var(--label);color:var(--ink);box-shadow:none}
+.map-wrap,.game-wrap{border:2px solid var(--label);border-radius:var(--r-lg);box-shadow:8px 8px 0 var(--orange)}
+.map-bar{font-family:var(--sf-mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+
+/* sheets & type */
+.modal{background:rgba(11,10,14,.8);-webkit-backdrop-filter:none;backdrop-filter:none}
+.sheet,.arena,.profile{background:var(--surface);border:2px solid var(--label);border-radius:var(--r-lg);box-shadow:8px 8px 0 var(--orange)}
+.sheet{padding:28px 30px}
+.h1{font-size:46px;line-height:.92;font-weight:800;letter-spacing:-.05em;text-transform:uppercase;margin-bottom:10px;transform:rotate(-2deg)}
+.h2{font-size:26px;font-weight:800;letter-spacing:-.04em;text-transform:uppercase}
+.sub{font-size:13.5px}
+.quiz-tag{font-family:var(--sf-mono);font-weight:500;background:var(--orange);color:var(--ink);padding:2px 8px;border-radius:4px}
+.sheet-icon{background:var(--surface-elevated)!important;border:2px solid var(--label)!important;border-radius:14px;transform:rotate(-6deg)}
+kbd{background:var(--label);color:var(--ink);border:0;border-radius:4px;box-shadow:0 2px 0 rgba(0,0,0,.5)}
+
+/* buttons: they physically press */
+.btn-primary{height:48px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--lime);color:var(--ink);font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;box-shadow:4px 4px 0 var(--label);transition:transform .08s,box-shadow .08s,background .1s}
+.btn-primary:hover{background:#d9ff74;transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--label)}
+.btn-primary:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--label)}
+.btn-secondary{height:42px;border:2px solid var(--label);border-radius:var(--r-md);background:transparent;font-weight:700}
+.btn-secondary:hover{background:var(--label);color:var(--ink)}
+.choice-btn{height:50px;border:2px solid var(--label);border-radius:var(--r-md);background:var(--surface-elevated);font-size:16px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.choice-btn:hover{border-color:var(--orange);transform:translate(-1px,-1px)}
+.choice-btn.correct{background:var(--lime)!important;color:var(--ink);border-color:var(--ink)!important}
+.choice-btn.wrong{background:var(--red)!important;color:var(--ink);border-color:var(--ink)!important}
+.filter-btn{border:2px solid var(--separator-subtle);font-weight:700}
+.filter-btn.on{background:var(--orange);color:var(--ink);border-color:var(--label)}
+.expr-card,.meta-card,.swatch,.arena-stats,.arena-stage,.quiz-box,.reward-box{border:2px solid var(--separator-subtle);border-radius:var(--r-md)}
+.expr-card.on{border-color:var(--lime);background:rgba(198,255,61,.1)}
+.progress-fill{background:var(--lime)}
+.reward-box p,.score-val,.hud-best{font-family:var(--sf-mono)}
+
+/* HUD */
+.hud-heart{fill:var(--red)}
+.hud-heart.lost{fill:rgba(244,239,230,.16)}
+.buff{background:var(--lime);color:var(--ink);border-color:var(--ink);border-radius:6px;font-family:var(--sf-mono);padding:2px 9px;box-shadow:2px 2px 0 var(--ink)}
+.diff-badge,.diff-badge.casual,.diff-badge.hero{border:0;border-radius:5px;font-weight:800;color:var(--ink)}
+.diff-badge{background:var(--blue)}
+.diff-badge.casual{background:var(--green)}
+.diff-badge.hero{background:var(--orange)}
+.touch-btn{background:var(--surface);border:2px solid var(--label)}
+.touch-btn.action{background:var(--orange);color:var(--ink);border-color:var(--ink)}
+.touch-btn.dash{background:var(--lime);color:var(--ink);border-color:var(--ink);font:800 22px var(--sf)}
+
+/* combo readout */
+#fxHud{position:absolute;inset:0;pointer-events:none}
+.combo{position:absolute;right:20px;top:62px;font:800 30px/1 var(--sf);color:var(--lime);text-transform:uppercase;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink);transform:rotate(-5deg)}
+.combo.bump{animation:bump .28s cubic-bezier(.3,1.8,.5,1)}
+@keyframes bump{from{transform:rotate(-5deg) scale(1.6)}to{transform:rotate(-5deg) scale(1)}}
+@media (prefers-reduced-motion:reduce){.view.on,.sheet,.combo.bump{animation:none}}
+
+/* keep tall sheets inside the frame */
+.sheet{max-height:100%;overflow-y:auto}
+#modalStart .sheet{padding:20px 26px}
+#modalStart .sheet-icon{display:none}
+#modalStart .keys{margin:4px 0 12px}
+#modalStart .keys td{padding:3px 4px}
+
+/* clicking the playfield fires a bark, so show a crosshair */
+#gameCanvas{cursor:crosshair}
