@@ -36,7 +36,7 @@ HUB_CP_URL = "https://api.h5p.org/v1/content-types/H5P.CoursePresentation"
 HUB_IF_URL = "https://api.h5p.org/v1/content-types/H5P.IFrameEmbed"
 HUB_GM_URL = "https://api.h5p.org/v1/content-types/H5P.GameMap"
 
-DEFAULT_GAME_URL = "https://your-username.github.io/wordyssey/"
+DEFAULT_GAME_URL = "https://x34u.github.io/wordessy/"
 
 VOCAB_ITEMS = [
     ("apple", "Food", "What is this delicious fruit?", "apple", ["apple", "banana", "orange", "grape"], "A sweet crisp red or green fruit that grows on trees."),
@@ -815,14 +815,20 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
         "disableImageZooming": False,
     }
 
-    def stage_node(label, cx, cy, neighbors, content_item, is_start=False):
+    # Pre-assign IDs so we can wire prerequisites between stages
+    stage_ids = [new_id() for _ in range(10)]
+
+    def stage_node(idx, label, cx, cy, neighbors, content_item, is_start=False, prereq_idx=None):
+        restrictions = []
+        if prereq_idx is not None:
+            restrictions = [{"restrictionType": "stage", "restrictionValue": stage_ids[prereq_idx]}]
         return {
-            "id": new_id(),
+            "id": stage_ids[idx],
             "type": "stage",
             "label": label,
             "canBeStartStage": is_start,
             "time": {},
-            "accessRestrictions": {"allOrAnyRestrictionSet": "all", "restrictionSetList": []},
+            "accessRestrictions": {"allOrAnyRestrictionSet": "all", "restrictionSetList": restrictions},
             "specialStageExtraLives": 1,
             "specialStageExtraTime": 1,
             "neighbors": neighbors,
@@ -835,14 +841,17 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
             "contentsList": [{"contentType": content_item}],
         }
 
-    def special_node(label, cx, cy, neighbors, special_type, link_url=None):
+    def special_node(idx, label, cx, cy, neighbors, special_type, link_url=None, prereq_idx=None):
+        restrictions = []
+        if prereq_idx is not None:
+            restrictions = [{"restrictionType": "stage", "restrictionValue": stage_ids[prereq_idx]}]
         node = {
-            "id": new_id(),
+            "id": stage_ids[idx],
             "type": "special-stage",
             "label": label,
             "canBeStartStage": False,
             "time": {},
-            "accessRestrictions": {"allOrAnyRestrictionSet": "all", "restrictionSetList": []},
+            "accessRestrictions": {"allOrAnyRestrictionSet": "all", "restrictionSetList": restrictions},
             "specialStageType": special_type,
             "specialStageExtraLives": 1,
             "specialStageExtraTime": 1,
@@ -859,20 +868,23 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
             node["specialStageLinkTarget"] = "_blank"
         return node
 
+    # Stage order: 0→1→2→3→4→5→6→7, then 7 unlocks both 8 (link) and 9 (finish)
     elements = [
         stage_node(
-            "1-1 Basic: Intro & HTML5 Game",
+            0, "1-1 Basic: Intro & HTML5 Game",
             14.5, 77.5, ["1"],
             build_course_presentation_shell(intro_slides, "1-1 Wordyssey Course Presentation"),
             is_start=True,
+            prereq_idx=None,   # start stage — always unlocked
         ),
         stage_node(
-            "1-3 Basic: Food & Fruits Quiz",
+            1, "1-3 Basic: Food & Fruits Quiz",
             25.5, 71.5, ["0", "2"],
             mc_apple,
+            prereq_idx=0,      # requires stage 0
         ),
         stage_node(
-            "2-1 Daily Life: Drag the Words",
+            2, "2-1 Daily Life: Drag the Words",
             28.5, 37.5, ["1", "3"],
             make_dragtext(
                 "Drag the English vocabulary words into the matching Wordyssey sentences.",
@@ -880,45 +892,53 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
                 "You can read stories inside a *book*, drive a four-wheel *car* down the road, and climb a majestic stone *castle* in Adventure Peaks.",
                 "Wordyssey Vocabulary Drag the Words",
             ),
+            prereq_idx=1,      # requires stage 1
         ),
         stage_node(
-            "2-3 Sunset Valley: True or False",
+            3, "2-3 Sunset Valley: True or False",
             39.0, 35.5, ["2", "4"],
             make_truefalse(
                 "True or False: Wordi the Inu is a friendly puppy wearing a blue paw bandana.",
                 True, "clue-dog.png", "Wordi the friendly puppy", image_dims, "Wordi True/False Check",
             ),
+            prereq_idx=2,      # requires stage 2
         ),
         stage_node(
-            "3-1 Adventure: Wordi & Modes",
+            4, "3-1 Adventure: Wordi & Modes",
             53.5, 36.5, ["3", "5"],
             build_course_presentation_shell(adventure_slides, "3-1 Wordi & Modes Course Presentation"),
+            prereq_idx=3,      # requires stage 3
         ),
         stage_node(
-            "3-3 Citadel: Memory Game",
+            5, "3-3 Citadel: Memory Game",
             67.0, 36.5, ["4", "6"],
             make_memorygame(["apple", "star", "dog", "book", "castle", "pizza"], image_dims, "Wordyssey Clue Memory Game"),
+            prereq_idx=4,      # requires stage 4
         ),
         stage_node(
-            "4-1 Future: 12 Word Flashcards",
+            6, "4-1 Future: 12 Word Flashcards",
             78.0, 50.5, ["5", "7"],
             make_dialogcards(0, 0, 100, 100, image_dims)["action"],
+            prereq_idx=5,      # requires stage 5
         ),
         stage_node(
-            "4-3 Quantum Spire: Speed Quiz",
+            7, "4-3 Quantum Spire: Speed Quiz",
             90.0, 51.5, ["6", "8", "9"],
             make_single_choice_set(0, 0, 100, 100, ["star", "pizza", "car", "tree", "sun", "wave"])["action"],
+            prereq_idx=6,      # requires stage 6
         ),
         special_node(
-            "Play Live HTML5 Game",
+            8, "Play Live HTML5 Game",
             78.0, 81.0, ["7", "9"],
             "link",
             link_url=game_url,
+            prereq_idx=7,      # requires stage 7
         ),
         special_node(
-            "Final Stage: Star Palace Finish",
+            9, "Final Stage: Star Palace Finish",
             88.0, 81.0, ["7", "8"],
             "finish",
+            prereq_idx=7,      # requires stage 7
         ),
     ]
 
@@ -995,7 +1015,7 @@ def build_gamemap_content(game_url: str, image_dims: dict[str, tuple[int, int]])
             "enableSolutionsButton": True,
             "map": {
                 "showLabels": True,
-                "roaming": "complete",
+                "roaming": "free",
                 "fog": "all",
             },
         },
